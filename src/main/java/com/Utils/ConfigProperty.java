@@ -14,7 +14,7 @@ public class ConfigProperty {
 	 * 
 	 * @param String filePath
 	 */
-	public static void readProperties(String filePath) {
+	public static void loadPropertyFile(String filePath) {
 
 		try {
 			FileInputStream fis = new FileInputStream(filePath);
@@ -35,7 +35,7 @@ public class ConfigProperty {
 	 * @param String key
 	 * @return String value
 	 */
-	public static String getProperty(String key) {
+	public static String getPropertyFile(String key) {
 		return property.getProperty(key);
 	}
 }

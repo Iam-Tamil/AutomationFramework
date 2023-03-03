@@ -10,20 +10,48 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ReadExcel {
 
-	public static String[][] getExcelData(String Filename) {
-		
-		XSSFWorkbook Wbook = null;
+	public static XSSFWorkbook Wbook = null;
+	public static XSSFSheet sheet;
+	public static XSSFRow row;
+	public static XSSFRow cell;
+
+	public static void setExcellFile(String filename) {
+		Wbook = null;
 		try {
-			Wbook = new XSSFWorkbook("./Excel File/"+Filename+".xlsx");
+			Wbook = new XSSFWorkbook("./Excel File/"+filename+".xlsx");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		XSSFSheet sheet = Wbook.getSheetAt(0);
-		int lastRow = sheet.getLastRowNum();
-		int physicalNumberOfRows = sheet.getPhysicalNumberOfRows();
-		short lastCell = sheet.getRow(0).getLastCellNum();
+	}
+
+	public static XSSFSheet createSheet() {
+		return Wbook.createSheet();
+	}
+
+	public static XSSFSheet setSheet(int index) {
+		return Wbook.getSheetAt(index);
+	}
+
+	public static XSSFSheet setSheet(String name) {
+		return Wbook.getSheet(name);
+	}
+
+	public static int setLastRowNum() {
+		return sheet.getLastRowNum();
+	}
+
+	public static int setPhysicalNumberOfRows() {
+		return sheet.getPhysicalNumberOfRows();
+	}
+
+	public static short setLastCellNum() {
+		return sheet.getRow(0).getLastCellNum();
+	}
+
+	public static String[][] readExcelData(int lastRow, short lastCell) {
+
 		String[][] data = new String[lastRow][lastCell];
-		
+
 		for (int i = 1; i <= lastRow; i++) {
 			XSSFRow row = sheet.getRow(i);
 			for (int j = 0; j < lastCell; j++) {
@@ -33,12 +61,15 @@ public class ReadExcel {
 				data[i-1][j] = Value;      
 			}
 		}
+		return data;
+	}
+
+	public static void closeExcelFile() {
 		try {
 			Wbook.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return data;
 	}
 
 }

@@ -9,10 +9,10 @@ import io.cucumber.junit.CucumberOptions.SnippetType;
 @RunWith(Cucumber.class)
 
 @CucumberOptions(
-		features = "src/test/Feature File/",
+		features = "D:\\eclipse-workspace\\AutomationFramework\\src\\Feature File",
+		dryRun = false,
 		glue = "com.Steps",
 		snippets = SnippetType.CAMELCASE,
-		dryRun = false,
 		monochrome = true,
 		plugin = {"pretty",
 				"html:TestReport/login.html"})

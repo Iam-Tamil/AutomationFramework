@@ -14,14 +14,14 @@ import com.Utils.Constants;
 
 public class InitDriver {
 	
-	public static WebDriver driver = null;
+	public static WebDriver driver;
 	public static int minWaitTime = 10;
 	public static int maxWaitTime = 20;
 	public static WebDriverWait wait = null;
 
 	public static void launchBrowser(browser BrowserName) {
 		
-		ConfigProperty.readProperties(Constants.CONFIGURATION_FILEPATH);
+		ConfigProperty.loadPropertyFile(Constants.CONFIGURATION_FILEPATH);
 
 		switch (BrowserName) {
 		case CHROME:
@@ -37,9 +37,9 @@ public class InitDriver {
 		}
 		driver.manage().window().maximize();
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(Constants.IMPLICIT_WAIT_TIME));
-		driver.get(ConfigProperty.getProperty("url"));
+		driver.get(ConfigProperty.getPropertyFile("url"));
 		wait = new WebDriverWait(driver,Duration.ofSeconds(Constants.EXPLICIT_WAIT_TIME));
-		
+		PageInitialize.initialize();
 	}
 
 	public static void tearDown() {

@@ -43,7 +43,7 @@ public class CommonMethods extends PageInitialize {
 		return currentUrl;
 	}
 
-	public static String getTitle(){
+	public static String getPageTitle(){
 		String title = driver.getTitle();
 		return title;
 	}
@@ -117,7 +117,12 @@ public WebElement element(Locators type, String Value) {
 		return null;
 	
 	}
-	public static String getAttribute(WebElement element, String value) {
+	
+	public static String getElementText(WebElement element) {
+		return element.getText();
+	}
+	
+	public static String getAttributeName(WebElement element, String value) {
 		String attribute = element.getAttribute(value);
 		return attribute;
 	}
