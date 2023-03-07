@@ -10,9 +10,12 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.NoSuchFrameException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriverException;
@@ -23,21 +26,23 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.Enum.Locators;
+import com.Utils.Constants;
 
 public class CommonMethods extends PageInitialize {
 
 	public static Select select;
 	public static Actions actions;
-	public static WebDriverWait wait;
 	public static TakesScreenshot ScreenShot;
 
-	
 
-// Webdriver methods
+
+	// Webdriver methods
+
+
 	public static void setUrl(String value) {
 		driver.get(value);
 	}
-	
+
 	public static String getURL(){
 		String currentUrl = driver.getCurrentUrl();
 		return currentUrl;
@@ -49,10 +54,10 @@ public class CommonMethods extends PageInitialize {
 	}
 
 
-// WebElement methods
-	
-public WebElement element(Locators type, String Value) {
-		
+	// WebElement methods
+
+	public static WebElement element(Locators type, String Value) {
+
 		try {
 			switch (type) {
 			case id:
@@ -67,7 +72,7 @@ public WebElement element(Locators type, String Value) {
 				return driver.findElement(By.className(Value));
 			case name:
 				return driver.findElement(By.name(Value));
-			case css:
+			case css:	
 				return driver.findElement(By.cssSelector(Value));
 			default:
 				break;
@@ -81,11 +86,11 @@ public WebElement element(Locators type, String Value) {
 		}catch(Exception e) {
 			System.err.println(e.getMessage());
 		}
-		
+
 		return null;
 	}
-	
-	public List<WebElement> elements(Locators type, String Value) {
+
+	public static List<WebElement> elements(Locators type, String Value) {
 		try {
 			switch (type) {
 			case id:
@@ -115,47 +120,49 @@ public WebElement element(Locators type, String Value) {
 			System.err.println(e.getMessage());
 		}
 		return null;
-	
+
 	}
-	
+
 	public static String getElementText(WebElement element) {
 		return element.getText();
 	}
-	
+
 	public static String getAttributeName(WebElement element, String value) {
 		String attribute = element.getAttribute(value);
 		return attribute;
 	}
 
-	public static void passKeys(WebElement element, String value) {
+	public static void sendText(WebElement element, String value) {
+		waitForVisibility(element);
 		element.sendKeys(value);
 	}
 
 	public static void submit(WebElement element) {
+		waitForClickable(element);
 		element.click();
 	}
 
-	public static void close() {
+	public static void closeBrowser() {
 		driver.close();
 	}
 
-	public static boolean enabled(WebElement element) {
+	public static boolean checkEnabled(WebElement element) {
 		boolean enabled = element.isEnabled();
 		return enabled;
 	}
 
-	public static boolean displayed(WebElement element) {
+	public static boolean checkDisplayed(WebElement element) {
 		boolean displayed = element.isDisplayed();
 		return displayed;
 	}
 
-	public static boolean selected(WebElement element) {
+	public static boolean checkSelected(WebElement element) {
 		boolean selected = element.isSelected();
 		return selected;
 	}
 
-// Dropdown methods
-	
+	// Dropdown methods
+
 	public static void selectValue(WebElement element, String value) {
 		new Select(element).selectByValue(value);
 	}
@@ -185,31 +192,31 @@ public WebElement element(Locators type, String Value) {
 		List<WebElement> options = select.getOptions();
 		return options;
 	}
-	
+
 	public static List<WebElement> allSelectedOptions(WebElement element) {
 		select = new Select(element);
 		List<WebElement> allSelectedOptions = select.getAllSelectedOptions();
 		return allSelectedOptions;
 	}
-	
+
 	public static WebElement firstSelectedOption(WebElement element) {
 		select = new Select(element);
 		WebElement firstSelectedOption = select.getFirstSelectedOption();
 		return firstSelectedOption;
 	}
-	
+
 	public static boolean isMultiple(WebElement element) {
 		select = new Select(element);
 		boolean multiple = select.isMultiple();
 		return multiple;
 	}
-	
+
 	public static void deselectAll(WebElement element) {
 		select = new Select(element);
 		select.deselectAll();
 	}
-	
-// Window handles
+
+	// Window handles
 	public static String getWindow() {
 		String windowHandle = driver.getWindowHandle();
 		return windowHandle;
@@ -221,28 +228,40 @@ public WebElement element(Locators type, String Value) {
 		driver.switchTo().window(Win.get(i));
 	}
 
-// Frames
+	// Frames
 	public static void iFrame(int index) {
-		driver.switchTo().frame(index);
+		try {
+			driver.switchTo().frame(index);
+		} catch (NoSuchFrameException e) {
+			e.printStackTrace();
+		}
 	}
-	
+
 	public static void iFrame(String Value) {
-		driver.switchTo().frame(Value);
+		try {
+			driver.switchTo().frame(Value);
+		} catch (NoSuchFrameException e) {
+			e.printStackTrace();
+		}
 	}
-	
+
 	public static void iFrame(WebElement ele) {
-		driver.switchTo().frame(ele);
+		try {
+			driver.switchTo().frame(ele);
+		} catch (NoSuchFrameException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void parentFrame() {
 		driver.switchTo().parentFrame();
 	}
-	
+
 	public static void defaultContent() {
 		driver.switchTo().defaultContent();
 	}
 
-// Action
+	// Action
 	public static void moveToElement(WebElement element) {
 		actions = new Actions(driver);
 		actions.moveToElement(element);
@@ -252,24 +271,24 @@ public WebElement element(Locators type, String Value) {
 		actions = new Actions(driver);
 		actions.click(element);
 	}
-	
+
 	public static void rightClick(WebElement element) {
 		actions = new Actions(driver);
 		actions.contextClick(element);
 	}
-	
+
 	public static void doubleClick(WebElement element) {
 		actions = new Actions(driver);
 		actions.doubleClick(element);
 	}
-	
+
 	public static void dragAndDrop(WebElement source, WebElement target) {
 		actions = new Actions(driver);
 		actions.dragAndDrop(source, target);
 	}
-	
-// Alert
-	public static void alertText(String Value) {
+
+	// Alert
+	public static void sendTextAlert(String Value) {
 		try {
 			driver.switchTo().alert().sendKeys(Value);
 		} catch (NoAlertPresentException e) {
@@ -293,12 +312,23 @@ public WebElement element(Locators type, String Value) {
 		}
 	}
 
-// ScreenShot
+	public static String getTextAlert() {
+		String text = null;
+		try {
+			Alert alert = driver.switchTo().alert();
+			text = alert.getText();
+		} catch (NoAlertPresentException e) {
+			e.printStackTrace();
+		}
+		return text;
+	}
+
+	// ScreenShot
 	public static byte[] screenShot(String FileName) {
 		ScreenShot = (TakesScreenshot) driver;
 		byte[] picBytes = ScreenShot.getScreenshotAs(OutputType.BYTES);
 		File source = ScreenShot.getScreenshotAs(OutputType.FILE);
-		File destination = new File("./ScreenShot/"+FileName+"-"+getTimeStamp()+".png");
+		File destination = new File("./ScreenShot/"+FileName+getTimeStamp()+".png");
 		try {
 			FileUtils.copyFile(source, destination);
 		} catch (IOException e) {
@@ -307,23 +337,44 @@ public WebElement element(Locators type, String Value) {
 		return picBytes;
 	}
 
-// Time stamp
+	public static String screenShot() {
+		ScreenShot = (TakesScreenshot) driver;
+		File src = ScreenShot.getScreenshotAs(OutputType.FILE);
+		File destination = new File("./ScreenShot/image"+getTimeStamp()+".png");
+		String absolutePath = destination.getAbsolutePath();
+		try {
+			FileUtils.copyFile(src, destination);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return absolutePath;
+	}
+
+
+	// Time stamp
 	public static String getTimeStamp() {
 		Date date = new Date();
 		String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(date.getTime());
+		timeStamp = "-"+ timeStamp;
 		return timeStamp;
 	}
-	
 
-// Wait
-	
-	public static void implicit(int Time) {
-		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(Time));
+
+	// Wait
+
+	public static void implicit() {
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(Constants.IMPLICIT_WAIT_TIME));
 	}
 
-	public static void explicit(int Time, WebElement element) {
-		wait = new WebDriverWait(driver, Duration.ofSeconds(Time));
+	public static void explicit() {
+		wait = new WebDriverWait(driver, Duration.ofSeconds(Constants.EXPLICIT_WAIT_TIME));
+	}
+
+	public static void waitForVisibility(WebElement element) {
 		wait.until(ExpectedConditions.visibilityOf(element));
+	}
+	public static void waitForClickable(WebElement element) {
+		wait.until(ExpectedConditions.elementToBeClickable(element));
 	}
 
 	public static void wait(int seconds) {
@@ -335,5 +386,30 @@ public WebElement element(Locators type, String Value) {
 
 	}
 
+	// JavaScript 
 
+	public static JavascriptExecutor getJsObject() {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+
+
+
+		return js;
+	}
+
+	public static void jsClick(WebElement element) {
+		getJsObject().executeScript("arguments[0].click()", element);
+	}
+
+	public static void scrollToElement(WebElement element) {
+		getJsObject().executeScript("arguments[0].scrollIntoView(true)", element);
+	}
+
+	public static void scrollDown(int pixel) {
+		getJsObject().executeScript("window.scrollBy(0," + pixel + ")");
+	}
+
+
+	public static void scrollUp(int pixel) {
+		getJsObject().executeScript("window.scrollBy(0,-" + pixel + ")");
+	}
 }

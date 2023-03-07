@@ -7,16 +7,16 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-public class LoginTest extends CommonMethods {
+public class LoginTest_TC01 extends CommonMethods {
 
 	@Given("user enter the valid userID")
 	public void userEnterTheValidUserID() {
-	    passKeys(loginpage.userName(), ConfigProperty.getPropertyFile("username"));
+	    sendText(loginpage.userName(), ConfigProperty.getPropertyFile("username"));
 	    
 	}
 	@Given("user enter the valid password")
 	public void userEnterTheValidPassword() {
-		passKeys(loginpage.passWord(), ConfigProperty.getPropertyFile("password"));
+		sendText(loginpage.passWord(), ConfigProperty.getPropertyFile("password"));
 	    
 	}
 	@When("user click the signin button")

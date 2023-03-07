@@ -3,6 +3,7 @@ package com.Steps;
 import com.Base.CommonMethods;
 import com.Base.InitDriver;
 import com.Enum.browser;
+import com.Utils.ExtendReport;
 
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
@@ -13,6 +14,8 @@ public class Hooks {
 	@Before
 	public void start() {
 		InitDriver.launchBrowser(browser.CHROME);
+		ExtendReport.reportName("Guru99 Bank Application");
+		
 	}
 
 	@After
@@ -28,6 +31,8 @@ public class Hooks {
 		}
 
 		scenario.attach(picture, "image/png", scenario.getName());
+		
+		ExtendReport.reportFlush();
 
 		InitDriver.tearDown();
 	}

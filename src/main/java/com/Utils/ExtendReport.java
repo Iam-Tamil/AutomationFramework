@@ -15,7 +15,7 @@ public class ExtendReport {
 	
 	public static void reportName(String filename) {
 		// blank report 
-		reporter = new ExtentSparkReporter("./"+filename+CommonMethods.getTimeStamp()+".html");
+		reporter = new ExtentSparkReporter("./TestReport/"+filename+CommonMethods.getTimeStamp()+".html");
 				
 		// report
 		extend = new ExtentReports();
@@ -40,9 +40,9 @@ public class ExtendReport {
 	
 	public static ExtentTest testResult(String testStatus, String message) {
 		if(testStatus.toLowerCase()=="pass") {
-			test.pass(message);
+			test.pass(message, MediaEntityBuilder.createScreenCaptureFromPath(CommonMethods.screenShot()).build());
 		}else if(testStatus.toLowerCase()=="fail") {
-			test.fail(message, MediaEntityBuilder.createScreenCaptureFromPath("img.png").build());
+			test.fail(message, MediaEntityBuilder.createScreenCaptureFromPath(CommonMethods.screenShot()).build());
 		}
 		return test;
 	}

@@ -15,11 +15,12 @@ import com.Utils.Constants;
 public class InitDriver {
 	
 	public static WebDriver driver;
+	public static WebDriverWait wait;
 	public static int minWaitTime = 10;
 	public static int maxWaitTime = 20;
-	public static WebDriverWait wait = null;
+	
 
-	public static void launchBrowser(browser BrowserName) {
+	public static WebDriver launchBrowser(browser BrowserName) {
 		
 		ConfigProperty.loadPropertyFile(Constants.CONFIGURATION_FILEPATH);
 
@@ -40,6 +41,8 @@ public class InitDriver {
 		driver.get(ConfigProperty.getPropertyFile("url"));
 		wait = new WebDriverWait(driver,Duration.ofSeconds(Constants.EXPLICIT_WAIT_TIME));
 		PageInitialize.initialize();
+		
+		return driver;
 	}
 
 	public static void tearDown() {
